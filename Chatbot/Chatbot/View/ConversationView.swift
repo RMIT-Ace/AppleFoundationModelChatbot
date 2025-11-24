@@ -21,27 +21,30 @@ struct ConversationView: View {
                 ScrollView {
                     ForEach(vm.conversation, id: \.self) { conversation in
                         VStack(alignment: .leading) {
-                            VStack(alignment: .leading) {
+                            HStack {
                                 Text(conversation.prompt)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding()
-                                    .background(.blue)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 10)
+                                        .fill(.blue.opacity(0.2)))
                                     .padding(.bottom, 8)
                                     .padding(.trailing, 8)
+                                Spacer()
                             }
                             .frame(maxWidth: .infinity)
-                            VStack(alignment: .trailing) {
+                            HStack {
+                                Spacer()
                                 Text(conversation.response ?? "???")
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
                                     .padding()
-                                    .background(.green)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 10)
+                                        .fill(.green.opacity(0.2)))
                                     .padding(.bottom, 12)
                                     .padding(.leading, 8)
                             }
                             .frame(maxWidth: .infinity)
                         }
                         .frame(maxWidth: .infinity)
-                        .border(.red)
                     }
                     Text(" ")
                         .id("Bottom")
@@ -104,8 +107,17 @@ struct ConversationView: View {
 
 #Preview {
     let vm = AppleFoundationModelViewModel()
-    NavigationStack {
+    vm.conversation = [
+        PromptResponse(prompt: "Hello", response: "This is a response"),
+        PromptResponse(
+            prompt: "How are you?",
+            response: "This is a very very long response which contains a long giberish string that will make the text long and unwieldy and so it will be easier to test the layout code. Yet, there are still more text coming out as if it cannot be stopped entirely."
+        ),
+        PromptResponse(prompt: "1 + 2 = ?", response: "3"),
+    ]
+    return NavigationStack {
         ConversationView()
+            .frame(width: 400)
             .environment(vm)
     }
 }
