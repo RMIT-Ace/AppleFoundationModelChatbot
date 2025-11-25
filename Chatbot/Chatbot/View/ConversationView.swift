@@ -18,59 +18,71 @@ struct ConversationView: View {
     var body: some View {
         NavigationStack {
             ScrollViewReader { scrollReader in
-                ScrollView {
-                    ForEach(vm.conversation, id: \.self) { conversation in
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Text(conversation.prompt)
-                                    .padding()
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 10)
-                                        .fill(.blue.opacity(0.2)))
-                                    .padding(.bottom, 8)
-                                    .padding(.trailing, 8)
-                                Spacer()
-                            }
-                            .frame(maxWidth: .infinity)
-                            HStack {
-                                Spacer()
-                                Text(conversation.response ?? "???")
-                                    .padding()
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 10)
-                                        .fill(.green.opacity(0.2)))
-                                    .padding(.bottom, 12)
-                                    .padding(.leading, 8)
+                ZStack {
+                    ScrollView {
+                        ForEach(vm.conversation, id: \.self) { conversation in
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Text(conversation.prompt)
+                                        .padding()
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .fill(.blue.opacity(0.2)))
+                                        .padding(.bottom, 8)
+                                        .padding(.trailing, 8)
+                                    Spacer()
+                                }
+                                .frame(maxWidth: .infinity)
+                                HStack {
+                                    Spacer()
+                                    Text(conversation.response ?? "???")
+                                        .padding()
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .fill(.green.opacity(0.2)))
+                                        .padding(.bottom, 12)
+                                        .padding(.leading, 8)
+                                }
+                                .frame(maxWidth: .infinity)
                             }
                             .frame(maxWidth: .infinity)
                         }
-                        .frame(maxWidth: .infinity)
+                        Text(" ")
+                            .id("Bottom")
                     }
-                    Text(" ")
-                        .id("Bottom")
-                }
-                .padding()
-                .navigationTitle(Text("Conversation"))
+                    .padding()
+                    .navigationTitle(Text("Conversation"))
 #if os(iOS)
-                .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarTitleDisplayMode(.inline)
 #endif
-                .toolbar {
+                    .toolbar {
 #if os(iOS)
-                    let placement = ToolbarItemPlacement.trailing
+                        let placement = ToolbarItemPlacement.trailing
 #else
-                    let placement = ToolbarItemPlacement.automatic
+                        let placement = ToolbarItemPlacement.automatic
 #endif
-                    ToolbarItem(placement: placement) {
-                        Button {
-                            isTextFieldFocused = true
-                            isShowingPromptSheet = true
-                        } label: {
-                            Image(systemName: "plus")
+                        ToolbarItem(placement: placement) {
+                            Button {
+                                isTextFieldFocused = true
+                                isShowingPromptSheet = true
+                            } label: {
+                                Image(systemName: "plus")
+                            }
                         }
                     }
-                }
-                .onChange(of: vm.conversation.count) { oldValue, newValue in
-                    scrollReader.scrollTo("Bottom", anchor: .bottom)
+                    .onChange(of: vm.conversation.count) { oldValue, newValue in
+                        scrollReader.scrollTo("Bottom", anchor: .bottom)
+                    }
+                    
+                    //-- Top layer
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Text("Token: \(vm.tokenCount)")
+                                .padding(.trailing)
+                        }
+                        Spacer()
+                    }
                 }
             }
         }
