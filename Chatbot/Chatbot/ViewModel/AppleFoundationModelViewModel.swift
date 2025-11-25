@@ -12,7 +12,12 @@ class AppleFoundationModelViewModel {
     
     var model = SystemLanguageModel()
     
-    var instruction: String = ""
+    var instruction: String = """
+        You are my best buddy who like to make jokes.
+        Give each answer short within 2 to 3 lines.
+        Append the number of tokens for the current session at the end of each 
+        new line using this format [token: X]
+        """
     
     var conversation: [PromptResponse] = []
     
@@ -21,10 +26,15 @@ class AppleFoundationModelViewModel {
     
     private var session: LanguageModelSession? = nil
     
+    init(instruction: String? = nil) {
+        resetSession(with: instruction)
+    }
+    
     /// Start a new LanguageModelSession session with current instruction.
-    func resetSession(with instruction: String) {
-        session = LanguageModelSession(instructions: instruction)
-        self.instruction = instruction
+    func resetSession(with instruction: String? = nil) {
+        let newInstruction = instruction ?? self.instruction
+        session = LanguageModelSession(instructions: newInstruction)
+        self.instruction = newInstruction
         self.conversation.removeAll()
     }
     
@@ -47,9 +57,9 @@ class AppleFoundationModelViewModel {
             )
             conversation.append(PromptResponse(prompt: prompt, response: formattedResponse))
             await updateTokenCount(response: responseContent)
-            return response?.content
+            return responseContent
         } catch {
-            print(">> ERRONR: \(error.localizedDescription)")
+            print(">> ERROR: \(error.localizedDescription)")
         }
         return nil
     }

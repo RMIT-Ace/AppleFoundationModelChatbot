@@ -29,6 +29,9 @@ struct InstructionView: View {
             }
         }
         .padding()
+        .onAppear {
+            instruction = vm.instruction
+        }
     }
 }
 

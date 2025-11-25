@@ -63,6 +63,13 @@ struct ConversationView: View {
 #endif
                         ToolbarItem(placement: placement) {
                             Button {
+                                vm.resetSession()
+                            } label: {
+                                Image(systemName: "xmark.bin")
+                            }
+                        }
+                        ToolbarItem(placement: placement) {
+                            Button {
                                 isTextFieldFocused = true
                                 isShowingPromptSheet = true
                             } label: {
