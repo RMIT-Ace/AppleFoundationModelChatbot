@@ -57,7 +57,7 @@ struct ConversationView: View {
 #endif
                     .toolbar {
 #if os(iOS)
-                        let placement = ToolbarItemPlacement.trailing
+                        let placement = ToolbarItemPlacement.topBarTrailing
 #else
                         let placement = ToolbarItemPlacement.automatic
 #endif
