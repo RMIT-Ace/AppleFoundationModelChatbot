@@ -34,7 +34,7 @@ class AppleFoundationModelViewModel {
     func resetSession(with instruction: String? = nil) {
         let newInstruction = instruction ?? self.instruction
         session = LanguageModelSession(
-            tools: [CurrentTimeTool()],
+            tools: [CurrentTimeTool(), CurrentDateTool()],
             instructions: newInstruction
         )
         self.instruction = newInstruction
