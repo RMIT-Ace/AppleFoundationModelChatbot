@@ -15,7 +15,7 @@ class AppleFoundationModelViewModel {
     var instruction: String = """
         You are my best buddy who like to make jokes.
         Give each answer short within 2 to 3 lines.
-        Append the number of tokens for the current session at the end of each 
+        Append the number of tokens (X) for the current session at the end of each 
         new line using this format [token: X]
         """
     
@@ -33,7 +33,10 @@ class AppleFoundationModelViewModel {
     /// Start a new LanguageModelSession session with current instruction.
     func resetSession(with instruction: String? = nil) {
         let newInstruction = instruction ?? self.instruction
-        session = LanguageModelSession(instructions: newInstruction)
+        session = LanguageModelSession(
+            tools: [CurrentTimeTool()],
+            instructions: newInstruction
+        )
         self.instruction = newInstruction
         self.conversation.removeAll()
     }

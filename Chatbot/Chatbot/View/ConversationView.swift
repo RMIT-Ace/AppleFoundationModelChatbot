@@ -40,7 +40,7 @@ struct ConversationView: View {
                                         .background(
                                             RoundedRectangle(cornerRadius: 10)
                                                 .fill(.green.opacity(0.2)))
-                                        .padding(.bottom, 12)
+                                        .padding(.bottom, 8)
                                         .padding(.leading, 8)
                                 }
                                 .frame(maxWidth: .infinity)
@@ -78,7 +78,9 @@ struct ConversationView: View {
                         }
                     }
                     .onChange(of: vm.conversation.count) { oldValue, newValue in
-                        scrollReader.scrollTo("Bottom", anchor: .bottom)
+                        withAnimation(.easeInOut(duration: 1.0)) {
+                            scrollReader.scrollTo("Bottom", anchor: .bottom)
+                        }
                     }
                     
                     //-- Top layer
