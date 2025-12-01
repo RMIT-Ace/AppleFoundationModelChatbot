@@ -10,18 +10,23 @@ import FoundationModels
 
 struct ContentView: View {
     @Environment(AppleFoundationModelViewModel.self) var vm
+    @State private var searchText: String = ""
     var body: some View {
         TabView {
-            InstructionView()
-                .tabItem {
-                    Label("Home", systemImage: "house")
-                }
+            Tab("Home", systemImage: "house") {
+                InstructionView()
+            }
             
-            ConversationView()
-                .tabItem {
-                    Label("Conversation", systemImage: "finder")
+            Tab("Conversation", systemImage: "finder") {
+                ConversationView()
+            }
+            Tab(role: .search) {
+                NavigationStack {
+                    Text("TBD Search: \(searchText)")
                 }
+            }
         }
+        .searchable(text: $searchText)
     }
 }
 
