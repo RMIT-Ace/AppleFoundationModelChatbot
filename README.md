@@ -2,7 +2,7 @@
 
 ![](docs/res/chatbot.jpeg)
 
-Sample implementation of chatbot using Apple Foundation Model.
+This fifteen-minute project demonstrates a sample implementation of a chatbot using Apple Foundation Model. It allows you to engage in a conversational-like game with the model.
 
 ## Features
 
@@ -10,6 +10,7 @@ Sample implementation of chatbot using Apple Foundation Model.
 * Chat-base prompt & response to interact with AI bot(s)
 * Recreate a new bot's behaviour and characteristics with new instruction statements
 * Utilise `tool-calling` to get current system date & time
+* Super secure - all interactions are **all** on-device
 
 
 ```swift
@@ -37,6 +38,8 @@ What it is good for:
 | Generate game dialog | "Respond in the void of a friendly inn keeper" |
 
 (Note: Taken from "Generating content and performing tasks with Foundation Models", Apple Developer Documentation, see Reference 1 below)
+
+I simply copied and pasted a section of my journal into the app and ended up having a fantastic hour-long conversation with the bot!  It was amazing!
 
 | Sample 1 | Sample 2 |
 | --- | --- |
