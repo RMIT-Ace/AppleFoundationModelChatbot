@@ -12,7 +12,8 @@ class AppleFoundationModelViewModel {
     
     static let shared = AppleFoundationModelViewModel(instruction:
     """
-    Give analysis on a given input and summarise it into one short sentence. 
+    First display an emoji that is appropriate to represent the whole given text.
+    Then give analysis on a given input and summarise it into one short sentence with less than 30 words. 
     Append at the end as a new line the tone or mood of the text. 
     Append at the end as a new line bullet points of people found in the given input.
     """
