@@ -10,6 +10,14 @@ import FoundationModels
 @Observable
 class AppleFoundationModelViewModel {
     
+    static let shared = AppleFoundationModelViewModel(instruction:
+    """
+    Give analysis on a given input and summarise it into one short sentence. 
+    Append at the end as a new line the tone or mood of the text. 
+    Append at the end as a new line bullet points of people found in the given input.
+    """
+    )
+    
     var model = SystemLanguageModel()
     
     var instruction: String = """
