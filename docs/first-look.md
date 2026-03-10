@@ -1,6 +1,13 @@
 
 ![](res/chatbot.jpeg)
 
+# Source Code
+
+Full access to source code is available here: 
+
+* https://github.com/RMIT-Ace/AppleFoundationModelChatbot
+
+
 # First Implementation
 
 

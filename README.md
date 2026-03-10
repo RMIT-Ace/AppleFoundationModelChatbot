@@ -13,6 +13,12 @@ This fifteen-minute project demonstrates a sample implementation of a chatbot us
 * Super secure - all interactions are **all** on-device
 * Expose Chatbot Functionality via AppIntent
 
+# Source Code
+
+Full access to source code is available here: 
+
+* https://github.com/RMIT-Ace/AppleFoundationModelChatbot
+
 
 # Blog
 

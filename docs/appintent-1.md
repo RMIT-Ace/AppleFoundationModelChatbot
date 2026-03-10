@@ -4,7 +4,13 @@
 
 Our first-look chatbot, which we implemented, is not just powerful; we can be generous and share this functionality with other apps. By using Apple's AppIntent framework, we can quickly achieve this.
 
-## Exposing App Functionality 
+# Source Code
+
+Full access to source code is available here: 
+
+* https://github.com/RMIT-Ace/AppleFoundationModelChatbot
+
+# Exposing App Functionality 
 
 ```swift
 import SwiftUI
@@ -29,7 +35,7 @@ struct SendToChatbotIntent: AppIntent {
 }
 ```
 
-## Prepare App for Activation via AppIntent
+# Prepare App for Activation via AppIntent
 
 We need to be able to call our chat engine from AppIntent. We will create an app shared object to do this.
 
