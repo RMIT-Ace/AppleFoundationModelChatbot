@@ -18,10 +18,17 @@ struct SendToChatbotIntent: AppIntent {
     
     @Parameter(title: "To Chatbot", requestValueDialog: "What to send?")
     var target: String
+
+    @Parameter(title: "Context", requestValueDialog: "Provide context (optional)")
+    var context: String
     
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<String> {
-        let answer = await AppleFoundationModelViewModel.shared.ask(prompt: target) ?? "No response"
+        if context == "NewConversation" {
+            AppleFoundationModelViewModel.shared.resetSession()
+        }
+        let combinedPrompt = context.isEmpty ? target : "\(target)\nContext: \(context)"
+        let answer = await AppleFoundationModelViewModel.shared.ask(prompt: combinedPrompt) ?? "No response"
         return .result(value: answer)
     }
 }
