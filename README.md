@@ -28,6 +28,7 @@ Full access to source code is available here:
 
 1. [First look at Apple Foundation Model](docs/first-look.md)
 2. [Expose Chatbot Functionality via AppIntent](docs/appintent-1.md)
+3. [Sharing functionality with devices](docs/appintent-2.md)
 
 # References
 
