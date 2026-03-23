@@ -10,9 +10,7 @@ import SwiftUI
 struct ConversationView: View {
     @Environment(AppleFoundationModelViewModel.self) var vm
     
-    @State private var isShowingPromptSheet: Bool = false
     @State private var prompt: String = ""
-    @State private var response: String = ""
     @FocusState private var isTextFieldFocused: Bool
 
     var body: some View {
@@ -68,14 +66,6 @@ struct ConversationView: View {
                                 Image(systemName: "xmark.bin")
                             }
                         }
-                        ToolbarItem(placement: placement) {
-                            Button {
-                                isTextFieldFocused = true
-                                isShowingPromptSheet = true
-                            } label: {
-                                Image(systemName: "plus")
-                            }
-                        }
                     }
                     .onChange(of: vm.conversation.count) { oldValue, newValue in
                         withAnimation(.easeInOut(duration: 1.0)) {
@@ -93,37 +83,50 @@ struct ConversationView: View {
                         Spacer()
                     }
                 }
-            }
-        }
-        .sheet(isPresented: $isShowingPromptSheet) {
-            VStack(alignment: .leading) {
-                Text("Prompt")
-                TextField("Enter prompt", text: $prompt)
-                    .focused($isTextFieldFocused)
-                    .submitLabel(.go)
-                    .onSubmit {
-                        Task {
-                            response = await vm.ask(prompt: prompt) ?? "???"
-                            isShowingPromptSheet = false
-                            prompt = ""
+                VStack {
+                    Spacer()
+                    HStack {
+                        TextField("Enter prompt", text: $prompt)
+                            .focused($isTextFieldFocused)
+                            .submitLabel(.go)
+                            .onSubmit {
+                                submitPrompt()
+                            }
+                            .padding(10)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color(UIColor.secondarySystemBackground))
+                            )
+                        
+                        Button {
+                            submitPrompt()
+                        } label: {
+                            Image(systemName: "paperplane.fill")
+                                .foregroundColor(.blue)
+                                .padding(10)
                         }
                     }
-                    .onAppear {
-                        isTextFieldFocused = true
-                    }
-                HStack {
-                    Button(role: .cancel) {
-                        isShowingPromptSheet = false
-                    } label: {
-                        Text("Cancel")
-                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 10)
+                    .background(
+                        Color(UIColor.systemBackground)
+                            .ignoresSafeArea(edges: .bottom)
+                    )
                 }
             }
-            .padding(20)
-            .presentationDetents([.height(200)])
         }
     }
     
+    private func submitPrompt() {
+        guard !prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+        let currentPrompt = prompt
+        prompt = ""
+        isTextFieldFocused = false
+        Task {
+            _ = await vm.ask(prompt: currentPrompt)
+            isTextFieldFocused = true
+        }
+    }
 }
 
 #Preview {
