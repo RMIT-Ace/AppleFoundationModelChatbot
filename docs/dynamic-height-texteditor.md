@@ -1,5 +1,9 @@
 # Dynamic height text editor
 
+![](res/dynaheight-editor.gif)
+
+This week, we’re improving our chatbot’s functionality by creating a more user-friendly input text field.  This involves increasing the height of the input field to accommodate multiple lines of text.
+
 ```swift
 ZStack(alignment: .topLeading) {
     if prompt.isEmpty { // (1)
@@ -46,7 +50,7 @@ ZStack(alignment: .topLeading) {
 
 # Explanation
 
-(1) This is a placeholder for our textfield. It displays "What's up" only when the text input is empty.
+(1) This displays a placeholder text "What's up" when the input is empty.
 
 (2) We use `TextEditor` to implement this text input field.
 
@@ -58,7 +62,7 @@ ZStack(alignment: .topLeading) {
 
 (5 & 6) We use `GeometryReader` to find the size of our textfield at runtime.
 
-(7) This is where we put our height (preference) observer code. We implemented as an invisible background. We set this preference to key `TextHeightPreferenceKey` which is defined further on in the file as:
+(7) This is where we place our height (preference) observer code.  We implemented it as an invisible background and set this preference to the key `TextHeightPreferenceKey` defined further down the file.
 
 ```swift
 struct TextHeightPreferenceKey: PreferenceKey {
@@ -69,7 +73,7 @@ struct TextHeightPreferenceKey: PreferenceKey {
 }
 ```
 
-(8) When change occurs, we update our dynamic height `textEditorHeight` here.
+(8) When change occur, we update our dynamic height `textEditorHeight` here.
 
 ```swift
 .onPreferenceChange(TextHeightPreferenceKey.self) { height in // (8)
