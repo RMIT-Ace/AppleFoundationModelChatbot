@@ -12,6 +12,7 @@ struct ConversationView: View {
     
     @State private var prompt: String = ""
     @FocusState private var isTextFieldFocused: Bool
+    @State private var textEditorHeight: CGFloat = 42
 
     var body: some View {
         NavigationStack {
@@ -72,31 +73,50 @@ struct ConversationView: View {
                             scrollReader.scrollTo("Bottom", anchor: .bottom)
                         }
                     }
-                    
-                    //-- Top layer
-                    VStack {
-                        HStack {
-                            Spacer()
-                            Text("Token: \(vm.tokenCount)")
-                                .padding(.trailing)
-                        }
-                        Spacer()
-                    }
                 }
+                
                 VStack {
-                    Spacer()
                     HStack {
-                        TextField("Enter prompt", text: $prompt)
-                            .focused($isTextFieldFocused)
-                            .submitLabel(.go)
-                            .onSubmit {
-                                submitPrompt()
+                        ZStack(alignment: .topLeading) {
+                            if prompt.isEmpty {
+                                Text("What's up?")
+                                    .foregroundColor(.secondary)
+                                    .padding(.horizontal, 8)
+                                    .padding(.top, 16)
+                                    .allowsHitTesting(false)
                             }
-                            .padding(10)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(UIColor.secondarySystemBackground))
-                            )
+                            
+                            TextEditor(text: $prompt)
+                                .focused($isTextFieldFocused)
+                                .frame(height: max(42, min(textEditorHeight, 200)))
+                                .scrollContentBackground(.hidden)
+                                .padding(.horizontal, 4)
+                                .padding(.top, 8)
+                                .overlay(
+                                    // Hidden text to measure actual rendered height including wrapping
+                                    GeometryReader { outerGeometry in
+                                        Text(prompt.isEmpty ? " " : prompt)
+                                            .font(.body)
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 8)
+                                            .frame(width: outerGeometry.size.width, alignment: .leading)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                            .background(
+                                                GeometryReader { geometry in
+                                                    Color.clear.preference(
+                                                        key: TextHeightPreferenceKey.self,
+                                                        value: geometry.size.height
+                                                    )
+                                                }
+                                            )
+                                            .opacity(0)
+                                    }
+                                )
+                        }
+                        .background(editorBackground)
+                        .onPreferenceChange(TextHeightPreferenceKey.self) { height in
+                            textEditorHeight = height
+                        }
                         
                         Button {
                             submitPrompt()
@@ -105,6 +125,7 @@ struct ConversationView: View {
                                 .foregroundColor(.blue)
                                 .padding(10)
                         }
+                        .keyboardShortcut(.return, modifiers: .command)
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 10)
@@ -124,8 +145,27 @@ struct ConversationView: View {
         isTextFieldFocused = false
         Task {
             _ = await vm.ask(prompt: currentPrompt)
-            isTextFieldFocused = true
         }
+    }
+    
+    private var editorBackground: some View {
+        RoundedRectangle(cornerRadius: 8)
+#if os(macOS)
+            .fill(Color(nsColor: .controlBackgroundColor))
+#else
+            .fill(Color(.systemBackground))
+#endif
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+            )
+    }
+}
+
+struct TextHeightPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 42
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 }
 
