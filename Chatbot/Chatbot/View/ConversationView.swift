@@ -129,10 +129,13 @@ struct ConversationView: View {
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 10)
+#if os(iOS)
                     .background(
                         Color(UIColor.systemBackground)
                             .ignoresSafeArea(edges: .bottom)
+                        
                     )
+#endif
                 }
             }
         }
